@@ -1,0 +1,10 @@
+# Intelidji IDEA
+
+*.iml
+.idea
+
+
+/vendor/
+
+# config
+idloom.ini

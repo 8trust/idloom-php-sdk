@@ -1,0 +1,10 @@
+{
+    "name": "8trust/idloom-php-sdk",
+    "require": {
+        "zendframework/zend-http": "^2.10",
+        "zendframework/zend-json": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {"IdLoom\\": "src/IdLoom"}
+    }
+}
