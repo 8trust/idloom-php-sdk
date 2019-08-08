@@ -14,8 +14,10 @@ Simple php sdk for idloom webservice: https://api.idloom.events/
 1. Install composer dependencies : ``` bin/./composer.sh install ```
 
 From that point, u can use the client :
+```
 $idLoom = new IdLoom\Client("CLIENT", "API_KEY");
 $events = $idLoom->getEvents();
+```
 
 ## Run test
 
