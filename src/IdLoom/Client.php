@@ -4,6 +4,10 @@ namespace IdLoom;
 use Zend\Http\Request;
 use Zend\Json\Json;
 
+/**
+ * Class Client
+ * @package IdLoom
+ */
 class Client
 {
     /**
@@ -16,8 +20,10 @@ class Client
      */
     private $apiKey;
 
+    const ENPOINT_EVENTS = 'events';
+
     const ENPOINTS = [
-        'events'
+        self::ENPOINT_EVENTS
     ];
 
     const EVENT_STATUS_NOT_READY = 'NotReady';
@@ -51,15 +57,24 @@ class Client
         $this->apiKey = $apiKey;
     }
 
-    private function getURL($endpoint)
+    /**
+     * @param string $endpoint
+     * @return string
+     * @throws Exception
+     */
+    private function getURL(string $endpoint)
     {
+        if (!in_array($endpoint, self::ENPOINTS)) {
+            throw new Exception('Unsupported enpoint : ' . $endpoint);
+        }
         return "https://$this->accountName.events.idloom.com/api/v1/" . $endpoint;
     }
 
     /**
+     * @param string $endpoint
      * @return Request
      */
-    private function getRequest($endpoint)
+    private function getRequest(string $endpoint)
     {
         $request = new Request();
         $request->getHeaders()->addHeaders([
@@ -70,13 +85,23 @@ class Client
         return $request;
     }
 
+    /**
+     * @return \Zend\Http\Client
+     */
     private function getClient()
     {
         $client = new \Zend\Http\Client();
         return $client;
     }
 
-    public function getEvents($statuses = [self::EVENT_STATUS_PUBLISHED, self::EVENT_STATUS_REGISTERING, self::EVENT_STATUS_SOLD_OUT, self::EVENT_STATUS_IN_PROGRESS])
+    /**
+     * @param array $statuses
+     * @return array
+     * @throws Exception
+     */
+    public function getEvents(
+        array $statuses = [self::EVENT_STATUS_PUBLISHED, self::EVENT_STATUS_REGISTERING, self::EVENT_STATUS_SOLD_OUT, self::EVENT_STATUS_IN_PROGRESS]
+    )
     {
         $unsupportedStatuses = array_diff($statuses, self::EVENTS_STATUSES);
         if (count($unsupportedStatuses) > 0) {
@@ -95,7 +120,12 @@ class Client
         return $responseAsArray;
     }
 
-    public static function printArray($array, $pre = '')
+    /**
+     * @param array $array
+     * @param string $pre
+     * @void
+     */
+    public static function printArray(array $array, string $pre = '')
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
